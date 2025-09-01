@@ -1,0 +1,167 @@
+/* Tailwind Directives */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom Properties for Theme Consistency */
+:root {
+    --teal: #008080;
+    --teal-dark: #006666;
+    --teal-light: #00a3a3;
+    --gray-light: #f7fafc;
+    --gray-dark: #2d3748;
+}
+
+/* Global Resets */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    @apply bg-white antialiased;
+}
+
+/* Custom Animations */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes buildUp {
+    0% {
+        height: 15px;
+    }
+    50% {
+        height: 50px;
+    }
+    100% {
+        height: 15px;
+    }
+}
+
+@keyframes craneMove {
+    0% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-15px);
+    }
+    100% {
+        transform: translateY(0);
+    }
+}
+
+/* Custom Tailwind Classes */
+@layer utilities {
+    .custom-teal {
+        background-color: var(--teal);
+    }
+
+    .custom-teal-hover:hover {
+        background-color: var(--teal-dark);
+    }
+
+    .custom-teal-focus {
+        --tw-ring-color: var(--teal);
+    }
+
+    .text-teal {
+        color: var(--teal);
+    }
+
+    .animate-fadeInUp {
+        animation: fadeInUp 0.8s ease-out forwards;
+    }
+
+    .hover-scale {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .hover-scale:hover {
+        transform: scale(1.05);
+        box-shadow: 0 4px 20px rgba(0, 128, 128, 0.3);
+    }
+}
+
+/* Loader Styles */
+.loader {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    z-index: 100;
+    @apply flex items-center justify-center;
+}
+
+.loader.show {
+    display: flex;
+}
+
+.loader-content {
+    background: linear-gradient(135deg, #ffffff, #e6fafa);
+    @apply p-6 rounded-xl text-center shadow-lg;
+}
+
+.building-loader {
+    width: 80px;
+    height: 80px;
+    position: relative;
+    margin: 0 auto 12px;
+}
+
+.building {
+    width: 50px;
+    height: 50px;
+    background: var(--teal);
+    position: absolute;
+    bottom: 0;
+    left: 15px;
+    @apply rounded;
+    animation: buildUp 1.5s infinite ease-in-out;
+}
+
+.crane {
+    width: 12px;
+    height: 24px;
+    background: var(--teal-dark);
+    position: absolute;
+    top: 0;
+    left: 34px;
+    @apply rounded;
+    animation: craneMove 1.5s infinite ease-in-out;
+}
+
+/* Gallery Image Hover */
+.gallery-img {
+    transition: transform 0.3s ease;
+}
+
+.gallery-img:hover {
+    transform: scale(1.1);
+}
+
+/* Amenity Logo */
+.amenity-logo {
+    width: 48px;
+    height: 48px;
+    object-fit: contain;
+}
+
+/* Location Advantage Item */
+.advantage-item::before {
+    content: '✔';
+    color: var(--teal);
+    margin-right: 8px;
+}
