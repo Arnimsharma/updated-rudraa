@@ -23,30 +23,63 @@
     "location": "Near Yamuna Expressway, Mathura, Uttar Pradesh",
     "lat": 27.4924,
     "lon": 77.6737,
-    "payment": {
-      "plan_a": {
-        "booking_amount": 449900,
-        "remaining_amount": 4049100,
-        "duration_days": 365
+    "variants": [
+      {
+        "size": "50 sq yards",
+        "payment": {
+          "plan_a": {
+            "booking_amount": 449900,
+            "remaining_amount": 4049100,
+            "duration_days": 365
+          },
+          "emi_plan": {
+            "booking_amount": 449900,
+            "per_month_emi": 67485,
+            "total_duration_months": 60
+          }
+        }
       },
-      "plan_b": {
-        "booking_amount": 449900,
-        "remaining_amount": 4049100,
-        "duration_days": 548
-      },
-      "emi_plan": {
-        "booking_amount": 449900,
-        "per_month_emi": 67485,
-        "total_duration_months": 60
+      {
+        "size": "100 sq yards",
+        "payment": {
+          "plan_a": {
+            "booking_amount": 499900,
+            "remaining_amount": 4499100,
+            "duration_days": 365
+          },
+          "plan_b": {
+            "booking_amount": 499900,
+            "remaining_amount": 4499100,
+            "duration_days": 548
+          },
+          "plan_c": {
+            "booking_amount": 499900,
+            "remaining_amount": 4499100,
+            "duration_days": 546
+          },
+          "shop": {
+            "booking_amount": 499900,
+            "remaining_amount": 4499100,
+            "duration_days": 548
+          }
+        }
       }
-    },
+    ],
+    "additional_charges": [
+      {"name": "Maintenance", "amount": 50000},
+      {"name": "Parking", "amount": 25000},
+      {"name": "Club Membership", "amount": 30000}
+    ],
     "location_advantages": [
       "90 mins from Gurgaon",
       "Lake view area",
       "Prime Yamuna Expressway frontage",
       "Close to schools and malls",
       "Serene natural surroundings"
-    ]
+    ],
+    "layout_plan_url": "assets/docs/keya_farms_layout.pdf",
+    "project_brochure_url": "assets/docs/keya_farms_brochure.pdf",
+    "pricing_plans_url": "assets/docs/keya_farms_pricing.pdf"
   },
   {
     "id": 2,
@@ -72,30 +105,52 @@
     "location": "Chhatikara Road, Vrindavan, Uttar Pradesh",
     "lat": 27.5650,
     "lon": 77.6593,
-    "payment": {
-      "plan_a": {
-        "booking_amount": 112000,
-        "remaining_amount": 1008000,
-        "duration_days": 548
+    "variants": [
+      {
+        "size": "80 sq yards",
+        "payment": {
+          "plan_a": {
+            "booking_amount": 112000,
+            "remaining_amount": 1008000,
+            "duration_days": 548
+          }
+        }
       },
-      "plan_b": {
-        "booking_amount": 112000,
-        "remaining_amount": 1008000,
-        "duration_days": 822
-      },
-      "emi_plan": {
-        "booking_amount": 112000,
-        "per_month_emi": 16800,
-        "total_duration_months": 60
+      {
+        "size": "150 sq yards",
+        "payment": {
+          "plan_a": {
+            "booking_amount": 120000,
+            "remaining_amount": 1080000,
+            "duration_days": 548
+          },
+          "plan_b": {
+            "booking_amount": 120000,
+            "remaining_amount": 1080000,
+            "duration_days": 822
+          },
+          "emi_plan": {
+            "booking_amount": 120000,
+            "per_month_emi": 18000,
+            "total_duration_months": 60
+          }
+        }
       }
-    },
+    ],
+    "additional_charges": [
+      {"name": "Maintenance", "amount": 40000},
+      {"name": "Power Backup", "amount": 20000}
+    ],
     "location_advantages": [
       "1 hour from Mathura",
       "Peaceful temple vicinity",
       "Close to Chhatikara Road",
       "Lush green surroundings",
       "Easy access to Vrindavan city"
-    ]
+    ],
+    "layout_plan_url": "assets/docs/vip_city_layout.pdf",
+    "project_brochure_url": "assets/docs/vip_city_brochure.pdf",
+    "pricing_plans_url": "assets/docs/vip_city_pricing.pdf"
   },
   {
     "id": 3,
@@ -121,6 +176,7 @@
     "location": "C-Scheme, Jaipur, Rajasthan",
     "lat": 26.9124,
     "lon": 75.7873,
+    "variants": [],
     "payment": {
       "plan_a": {
         "booking_amount": 49200,
@@ -133,13 +189,17 @@
         "duration_days": 456
       }
     },
+    "additional_charges": [],
     "location_advantages": [
       "5 mins from Jaipur Railway Station",
       "Central business district",
       "Close to malls and restaurants",
       "Excellent public transport",
       "Vibrant urban lifestyle"
-    ]
+    ],
+    "layout_plan_url": "assets/docs/mapple_park_layout.pdf",
+    "project_brochure_url": "assets/docs/mapple_park_brochure.pdf",
+    "pricing_plans_url": "assets/docs/mapple_park_pricing.pdf"
   },
   {
     "id": 4,
@@ -165,25 +225,47 @@
     "location": "NH-8, Neemrana, Rajasthan",
     "lat": 27.9894,
     "lon": 76.3787,
-    "payment": {
-      "plan_a": {
-        "booking_amount": 160000,
-        "remaining_amount": 1440000,
-        "duration_days": 456
+    "variants": [
+      {
+        "size": "75 sq yards",
+        "payment": {
+          "plan_a": {
+            "booking_amount": 160000,
+            "remaining_amount": 1440000,
+            "duration_days": 456
+          }
+        }
       },
-      "plan_b": {
-        "booking_amount": 160000,
-        "remaining_amount": 1440000,
-        "duration_days": 684
+      {
+        "size": "120 sq yards",
+        "payment": {
+          "plan_a": {
+            "booking_amount": 170000,
+            "remaining_amount": 1530000,
+            "duration_days": 456
+          },
+          "plan_b": {
+            "booking_amount": 170000,
+            "remaining_amount": 1530000,
+            "duration_days": 684
+          }
+        }
       }
-    },
+    ],
+    "additional_charges": [
+      {"name": "Maintenance", "amount": 60000},
+      {"name": "Development Fee", "amount": 35000}
+    ],
     "location_advantages": [
       "30 mins from Alwar",
       "Prime NH-8 frontage",
       "Near industrial hub",
       "Quiet suburban setting",
       "Close to community parks"
-    ]
+    ],
+    "layout_plan_url": "assets/docs/uptown_city_layout.pdf",
+    "project_brochure_url": "assets/docs/uptown_city_brochure.pdf",
+    "pricing_plans_url": "assets/docs/uptown_city_pricing.pdf"
   },
   {
     "id": 5,
@@ -209,29 +291,57 @@
     "location": "NH-8, Neemrana, Rajasthan",
     "lat": 27.9894,
     "lon": 76.3787,
-    "payment": {
-      "plan_a": {
-        "booking_amount": 300000,
-        "remaining_amount": 2700000,
-        "duration_days": 456
+    "variants": [
+      {
+        "size": "60 sq yards",
+        "payment": {
+          "plan_a": {
+            "booking_amount": 300000,
+            "remaining_amount": 2700000,
+            "duration_days": 456
+          },
+          "custom_plan": {
+            "booking_amount": 310000,
+            "remaining_amount": 2790000,
+            "duration_days": 600
+          }
+        }
       },
-      "plan_b": {
-        "booking_amount": 300000,
-        "remaining_amount": 2700000,
-        "duration_days": 684
-      },
-      "emi_plan": {
-        "booking_amount": 300000,
-        "per_month_emi": 45000,
-        "total_duration_months": 60
+      {
+        "size": "90 sq yards",
+        "payment": {
+          "plan_a": {
+            "booking_amount": 310000,
+            "remaining_amount": 2790000,
+            "duration_days": 456
+          },
+          "plan_b": {
+            "booking_amount": 310000,
+            "remaining_amount": 2790000,
+            "duration_days": 684
+          },
+          "emi_plan": {
+            "booking_amount": 310000,
+            "per_month_emi": 46500,
+            "total_duration_months": 60
+          }
+        }
       }
-    },
+    ],
+    "additional_charges": [
+      {"name": "Maintenance", "amount": 55000},
+      {"name": "Clubhouse Fee", "amount": 40000},
+      {"name": "Parking", "amount": 30000}
+    ],
     "location_advantages": [
       "30 mins from Alwar",
       "Prime NH-8 connectivity",
       "Near industrial and IT hubs",
       "Family-friendly community",
       "Access to green parks"
-    ]
+    ],
+    "layout_plan_url": "assets/docs/vista_hills_layout.pdf",
+    "project_brochure_url": "assets/docs/vista_hills_brochure.pdf",
+    "pricing_plans_url": "assets/docs/vista_hills_pricing.pdf"
   }
 ]
