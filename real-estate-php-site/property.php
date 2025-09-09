@@ -21,7 +21,7 @@ if (!$property) {
 }
 
 // Fallback for missing fields
-$property['images'] = $property['images'] ?? [$property['image']]; // Ensure at least one image
+$property['images'] = $property['images'] ?? [$property['image'] ?? 'assets/images/default.jpg'];
 $property['amenities'] = $property['amenities'] ?? [
     ['name' => 'Spacious Plots', 'logo' => 'images/icons/plot.png'],
     ['name' => '24/7 Security', 'logo' => 'images/icons/security.png'],
@@ -29,27 +29,44 @@ $property['amenities'] = $property['amenities'] ?? [
     ['name' => 'Clubhouse', 'logo' => 'images/icons/clubhouse.png'],
     ['name' => 'Power Backup', 'logo' => 'images/icons/power.png']
 ];
-$property['location'] = $property['location'] ?? $property['city'];
+$property['location'] = $property['location'] ?? $property['city'] ?? 'Unknown Location';
 $property['location_advantages'] = $property['location_advantages'] ?? [
     'Close to city center',
     'Excellent connectivity',
     'Natural surroundings',
     'Near key landmarks'
 ];
-$property['payment'] = $property['payment'] ?? [
-    'plan_a' => [
-        'booking_amount' => $property['price'] * 0.1,
-        'remaining_amount' => $property['price'] * 0.9,
-        'duration_days' => 365
-    ],
-    'plan_b' => [
-        'booking_amount' => $property['price'] * 0.1,
-        'remaining_amount' => $property['price'] * 0.9,
-        'duration_days' => 548
-    ]
-];
-// Only add emi_plan fallback if explicitly needed (not added by default)
-if (isset($property['payment']['emi_plan'])) {
+$property['variants'] = $property['variants'] ?? [];
+$property['additional_charges'] = $property['additional_charges'] ?? [];
+$property['layout_plan_url'] = $property['layout_plan_url'] ?? '#';
+$property['project_brochure_url'] = $property['project_brochure_url'] ?? '#';
+$property['pricing_plans_url'] = $property['pricing_plans_url'] ?? '#';
+$property['title'] = $property['title'] ?? 'Untitled Property';
+$property['price'] = $property['price'] ?? 0;
+$property['city'] = $property['city'] ?? 'Unknown City';
+$property['type'] = $property['type'] ?? 'Unknown Type';
+$property['area_sqft'] = $property['area_sqft'] ?? 0;
+$property['description'] = $property['description'] ?? 'No description available.';
+
+// Only set payment fallback if no variants and no payment defined
+if (empty($property['variants']) && !isset($property['payment'])) {
+    $property['payment'] = [
+        'plan_a' => [
+            'booking_amount' => $property['price'] * 0.1,
+            'remaining_amount' => $property['price'] * 0.9,
+            'duration_days' => 365
+        ],
+        'plan_b' => [
+            'booking_amount' => $property['price'] * 0.1,
+            'remaining_amount' => $property['price'] * 0.9,
+            'duration_days' => 548
+        ]
+    ];
+}
+if (!empty($property['variants'])) {
+    // If variants exist, unset top-level payment to avoid confusion
+    unset($property['payment']);
+} elseif (isset($property['payment']['emi_plan'])) {
     $property['payment']['emi_plan'] = $property['payment']['emi_plan'] ?? [
         'booking_amount' => $property['price'] * 0.1,
         'per_month_emi' => ($property['price'] * 0.9) / 60,
@@ -110,10 +127,10 @@ $property['map_embed'] = '<iframe src="https://www.google.com/maps/embed?pb=!1m1
         }
         .hover-scale:hover {
             transform: scale(1.05);
-            box-shadow: 0 4px 20px rgba(0, 128, 128, 0.3); /* Updated to #008080 shadow */
+            box-shadow: 0 4px 20px rgba(0, 128, 128, 0.3);
         }
         .bg-property-hero {
-            background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('<?php echo htmlspecialchars($property['image']); ?>') center/cover no-repeat;
+            background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('<?php echo htmlspecialchars($property['image'] ?? 'assets/images/default.jpg'); ?>') center/cover no-repeat;
         }
         .gallery-img {
             transition: transform 0.3s ease;
@@ -128,22 +145,62 @@ $property['map_embed'] = '<iframe src="https://www.google.com/maps/embed?pb=!1m1
         }
         .advantage-item::before {
             content: '✔';
-            color: #008080; /* Updated to teal */
+            color: #008080;
+            margin-right: 8px;
+        }
+        .variant-item::before {
+            content: '📏';
+            color: #008080;
+            margin-right: 8px;
+        }
+        .charge-item::before {
+            content: '₹';
+            color: #008080;
             margin-right: 8px;
         }
         .custom-teal {
-            background-color: #008080; /* Teal for buttons and backgrounds */
+            background-color: #008080;
         }
         .custom-teal-hover:hover {
-            background-color: #006666; /* Slightly darker teal for hover */
+            background-color: #006666;
         }
         .custom-teal-focus {
-            --tw-ring-color: #008080; /* Teal focus ring */
+            --tw-ring-color: #008080;
         }
         .text-teal {
-            color: #008080; /* Teal text */
+            color: #008080;
         }
-        /* Loader */
+        .variant-button {
+            transition: all 0.3s ease;
+        }
+        .variant-button.active {
+            background-color: #008080;
+            color: white;
+            transform: scale(1.05);
+        }
+        .payment-plan {
+            display: none;
+        }
+        .payment-plan.active {
+            display: flex;
+            flex-direction: row;
+            flex-wrap: nowrap;
+            overflow-x: auto;
+            gap: 2rem;
+        }
+        .payment-plan > div {
+            flex-shrink: 0;
+            width: 20rem; /* 320px */
+        }
+        @media (max-width: 640px) {
+            .payment-plan.active {
+                flex-direction: column;
+                overflow-x: hidden;
+            }
+            .payment-plan > div {
+                width: 100%;
+            }
+        }
         .loader {
             display: none;
             position: fixed;
@@ -160,7 +217,7 @@ $property['map_embed'] = '<iframe src="https://www.google.com/maps/embed?pb=!1m1
             display: flex;
         }
         .loader-content {
-            background: linear-gradient(135deg, #ffffff, #e6fafa); /* Subtle teal gradient */
+            background: linear-gradient(135deg, #ffffff, #e6fafa);
             padding: 24px;
             border-radius: 12px;
             text-align: center;
@@ -202,6 +259,13 @@ $property['map_embed'] = '<iframe src="https://www.google.com/maps/embed?pb=!1m1
             50% { transform: translateY(-15px); }
             100% { transform: translateY(0); }
         }
+        .resource-button {
+            transition: all 0.3s ease;
+        }
+        .resource-button:hover {
+            background-color: #006666;
+            transform: scale(1.05);
+        }
     </style>
 </head>
 <body class="font-sans antialiased bg-white">
@@ -229,9 +293,15 @@ $property['map_embed'] = '<iframe src="https://www.google.com/maps/embed?pb=!1m1
                         <li><strong>Type:</strong> <?php echo htmlspecialchars($property['type']); ?></li>
                         <li><strong>Size:</strong> <?php echo (int)$property['area_sqft']; ?> sqft</li>
                     </ul>
+                    <!-- Resource Buttons -->
+                    <div class="mt-8 flex flex-wrap gap-4">
+                        <a href="<?php echo htmlspecialchars($property['layout_plan_url']); ?>" target="_blank" class="resource-button bg-teal-500 text-white py-2 px-6 rounded-lg font-semibold custom-teal-hover transition">Layout Plan</a>
+                        <a href="<?php echo htmlspecialchars($property['project_brochure_url']); ?>" target="_blank" class="resource-button bg-teal-500 text-white py-2 px-6 rounded-lg font-semibold custom-teal-hover transition">Project Brochure</a>
+                        <a href="<?php echo htmlspecialchars($property['pricing_plans_url']); ?>" target="_blank" class="resource-button bg-teal-500 text-white py-2 px-6 rounded-lg font-semibold custom-teal-hover transition">Pricing Plans</a>
+                    </div>
                 </div>
                 <div class="animate-fadeInUp" style="animation-delay: 0.2s;">
-                    <img src="<?php echo htmlspecialchars($property['image']); ?>" alt="<?php echo htmlspecialchars($property['title']); ?>" class="rounded-xl shadow-lg w-full">
+                    <img src="<?php echo htmlspecialchars($property['image'] ?? 'assets/images/default.jpg'); ?>" alt="<?php echo htmlspecialchars($property['title']); ?>" class="rounded-xl shadow-lg w-full">
                 </div>
             </div>
         </div>
@@ -244,8 +314,8 @@ $property['map_embed'] = '<iframe src="https://www.google.com/maps/embed?pb=!1m1
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
                 <?php foreach ($property['amenities'] as $index => $amenity): ?>
                     <div class="bg-white p-6 rounded-xl shadow-lg text-center hover-scale animate-fadeInUp" style="animation-delay: <?php echo $index * 0.1; ?>s;">
-                        <img src="<?php echo htmlspecialchars($amenity['logo']); ?>" alt="<?php echo htmlspecialchars($amenity['name']); ?>" class="amenity-logo mx-auto mb-4">
-                        <h3 class="text-xl font-semibold text-teal"><?php echo htmlspecialchars($amenity['name']); ?></h3>
+                        <img src="<?php echo htmlspecialchars($amenity['logo'] ?? 'images/icons/default.png'); ?>" alt="<?php echo htmlspecialchars($amenity['name'] ?? 'Amenity'); ?>" class="amenity-logo mx-auto mb-4">
+                        <h3 class="text-xl font-semibold text-teal"><?php echo htmlspecialchars($amenity['name'] ?? 'Unknown Amenity'); ?></h3>
                     </div>
                 <?php endforeach; ?>
             </div>
@@ -287,44 +357,100 @@ $property['map_embed'] = '<iframe src="https://www.google.com/maps/embed?pb=!1m1
         </div>
     </section>
 
-    <!-- Payment Section -->
+    <!-- Payment Details Section -->
     <section class="py-20 bg-white">
         <div class="container mx-auto px-4">
             <h2 class="text-4xl font-bold text-center text-teal mb-12 animate-fadeInUp">Payment Details</h2>
-            <div class="grid grid-cols-1 <?php echo isset($property['payment']['emi_plan']) ? 'md:grid-cols-3' : 'md:grid-cols-2'; ?> gap-12">
-                <!-- Plan A -->
-                <div class="bg-teal-50 p-6 rounded-xl shadow-lg animate-fadeInUp">
-                    <h3 class="text-2xl font-semibold text-teal mb-6">Plan A: Full Payment</h3>
-                    <ul class="space-y-4 text-gray-600">
-                        <li><strong>Total Price:</strong> ₹<?php echo number_format($property['price']); ?></li>
-                        <li><strong>Booking Amount:</strong> ₹<?php echo number_format($property['payment']['plan_a']['booking_amount']); ?></li>
-                        <li><strong>Remaining Amount:</strong> ₹<?php echo number_format($property['payment']['plan_a']['remaining_amount']); ?></li>
-                        <li><strong>Duration:</strong> <?php echo (int)$property['payment']['plan_a']['duration_days']; ?> days</li>
-                    </ul>
+            <?php if (!empty($property['variants'])): ?>
+                <!-- Variant Selection Buttons -->
+                <div class="flex flex-wrap justify-center gap-4 mb-12">
+                    <?php foreach ($property['variants'] as $index => $variant): ?>
+                        <button class="variant-button bg-white text-teal border border-teal-500 py-2 px-6 rounded-lg hover:bg-teal-100 transition <?php echo $index === 0 ? 'active' : ''; ?>" data-variant="<?php echo $index; ?>">
+                            <?php echo htmlspecialchars($variant['size'] ?? 'Unknown Size'); ?>
+                        </button>
+                    <?php endforeach; ?>
                 </div>
-                <!-- Plan B -->
-                <div class="bg-teal-50 p-6 rounded-xl shadow-lg animate-fadeInUp" style="animation-delay: 0.2s;">
-                    <h3 class="text-2xl font-semibold text-teal mb-6">Plan B: Extended Payment</h3>
-                    <ul class="space-y-4 text-gray-600">
-                        <li><strong>Total Price:</strong> ₹<?php echo number_format($property['price']); ?></li>
-                        <li><strong>Booking Amount:</strong> ₹<?php echo number_format($property['payment']['plan_b']['booking_amount']); ?></li>
-                        <li><strong>Remaining Amount:</strong> ₹<?php echo number_format($property['payment']['plan_b']['remaining_amount']); ?></li>
-                        <li><strong>Duration:</strong> <?php echo (int)$property['payment']['plan_b']['duration_days']; ?> days</li>
-                    </ul>
+                <!-- Payment Plans for Each Variant -->
+                <div id="payment-plans">
+                    <?php foreach ($property['variants'] as $index => $variant): ?>
+                        <div class="payment-plan <?php echo $index === 0 ? 'active' : ''; ?>" data-variant="<?php echo $index; ?>">
+                            <?php foreach ($variant['payment'] ?? [] as $plan_name => $plan): ?>
+                                <div class="bg-teal-50 p-6 rounded-xl shadow-lg animate-fadeInUp" style="animation-delay: <?php echo (array_search($plan_name, array_keys($variant['payment'])) * 0.2); ?>s;">
+                                    <h3 class="text-2xl font-semibold text-teal mb-6"><?php echo htmlspecialchars(ucfirst(str_replace('_', ' ', $plan_name))); ?></h3>
+                                    <ul class="space-y-4 text-gray-600">
+                                        <li><strong>Total Price:</strong> ₹<?php echo number_format($plan['booking_amount'] + (isset($plan['remaining_amount']) ? $plan['remaining_amount'] : $plan['per_month_emi'] * $plan['total_duration_months'])); ?></li>
+                                        <li><strong>Booking Amount:</strong> ₹<?php echo number_format($plan['booking_amount'] ?? 0); ?></li>
+                                        <?php if (isset($plan['remaining_amount'])): ?>
+                                            <li><strong>Remaining Amount:</strong> ₹<?php echo number_format($plan['remaining_amount']); ?></li>
+                                            <li><strong>Duration:</strong> <?php echo (int)$plan['duration_days']; ?> days</li>
+                                        <?php else: ?>
+                                            <li><strong>Per Month EMI:</strong> ₹<?php echo number_format($plan['per_month_emi'] ?? 0); ?></li>
+                                            <li><strong>Total Duration:</strong> <?php echo (int)$plan['total_duration_months'] ?? 0; ?> months</li>
+                                        <?php endif; ?>
+                                    </ul>
+                                </div>
+                            <?php endforeach; ?>
+                        </div>
+                    <?php endforeach; ?>
                 </div>
-                <!-- EMI Plan (Conditional) -->
-                <?php if (isset($property['payment']['emi_plan'])): ?>
-                    <div class="bg-teal-50 p-6 rounded-xl shadow-lg animate-fadeInUp" style="animation-delay: 0.4s;">
-                        <h3 class="text-2xl font-semibold text-teal mb-6">EMI Plan</h3>
-                        <ul class="space-y-4 text-gray-600">
-                            <li><strong>Total Price:</strong> ₹<?php echo number_format($property['price']); ?></li>
-                            <li><strong>Booking Amount:</strong> ₹<?php echo number_format($property['payment']['emi_plan']['booking_amount']); ?></li>
-                            <li><strong>Per Month EMI:</strong> ₹<?php echo number_format($property['payment']['emi_plan']['per_month_emi']); ?></li>
-                            <li><strong>Total Duration:</strong> <?php echo (int)$property['payment']['emi_plan']['total_duration_months']; ?> months</li>
-                        </ul>
+            <?php else: ?>
+                <!-- No Variants: Show Top-Level Payment Plans -->
+                <div id="payment-plans">
+                    <div class="payment-plan active">
+                        <?php foreach ($property['payment'] ?? [] as $plan_name => $plan): ?>
+                            <div class="bg-teal-50 p-6 rounded-xl shadow-lg animate-fadeInUp" style="animation-delay: <?php echo (array_search($plan_name, array_keys($property['payment'])) * 0.2); ?>s;">
+                                <h3 class="text-2xl font-semibold text-teal mb-6"><?php echo htmlspecialchars(ucfirst(str_replace('_', ' ', $plan_name))); ?></h3>
+                                <ul class="space-y-4 text-gray-600">
+                                    <li><strong>Total Price:</strong> ₹<?php echo number_format($plan['booking_amount'] + (isset($plan['remaining_amount']) ? $plan['remaining_amount'] : $plan['per_month_emi'] * $plan['total_duration_months'])); ?></li>
+                                    <li><strong>Booking Amount:</strong> ₹<?php echo number_format($plan['booking_amount'] ?? 0); ?></li>
+                                    <?php if (isset($plan['remaining_amount'])): ?>
+                                        <li><strong>Remaining Amount:</strong> ₹<?php echo number_format($plan['remaining_amount']); ?></li>
+                                        <li><strong>Duration:</strong> <?php echo (int)$plan['duration_days']; ?> days</li>
+                                    <?php else: ?>
+                                        <li><strong>Per Month EMI:</strong> ₹<?php echo number_format($plan['per_month_emi'] ?? 0); ?></li>
+                                        <li><strong>Total Duration:</strong> <?php echo (int)$plan['total_duration_months'] ?? 0; ?> months</li>
+                                    <?php endif; ?>
+                                </ul>
+                            </div>
+                        <?php endforeach; ?>
                     </div>
-                <?php endif; ?>
-            </div>
+                </div>
+            <?php endif; ?>
+        </div>
+        <?php if (!empty($property['variants'])): ?>
+            <script>
+                document.querySelectorAll('.variant-button').forEach(button => {
+                    button.addEventListener('click', function() {
+                        // Remove active class from all buttons and plans
+                        document.querySelectorAll('.variant-button').forEach(btn => btn.classList.remove('active'));
+                        document.querySelectorAll('.payment-plan').forEach(plan => plan.classList.remove('active'));
+                        
+                        // Add active class to clicked button and corresponding plan
+                        this.classList.add('active');
+                        const variantIndex = this.getAttribute('data-variant');
+                        document.querySelector(`.payment-plan[data-variant="${variantIndex}"]`).classList.add('active');
+                    });
+                });
+            </script>
+        <?php endif; ?>
+    </section>
+
+    <!-- Additional Charges Section -->
+    <section class="py-20 bg-gradient-to-r from-white to-teal-50">
+        <div class="container mx-auto px-4">
+            <h2 class="text-4xl font-bold text-center text-teal mb-12 animate-fadeInUp">Additional Charges</h2>
+            <?php if (!empty($property['additional_charges'])): ?>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <?php foreach ($property['additional_charges'] as $index => $charge): ?>
+                        <div class="bg-white p-6 rounded-xl shadow-lg text-center hover-scale animate-fadeInUp" style="animation-delay: <?php echo $index * 0.1; ?>s;">
+                            <h3 class="text-xl font-semibold text-teal"><?php echo htmlspecialchars($charge['name'] ?? 'Unknown Charge'); ?></h3>
+                            <p class="text-lg text-gray-600">₹<?php echo number_format($charge['amount'] ?? 0); ?></p>
+                        </div>
+                    <?php endforeach; ?>
+                </div>
+            <?php else: ?>
+                <p class="text-lg text-gray-600 text-center">No additional charges for this property.</p>
+            <?php endif; ?>
         </div>
     </section>
 
@@ -345,7 +471,7 @@ $property['map_embed'] = '<iframe src="https://www.google.com/maps/embed?pb=!1m1
                 </div>
                 <form id="property-contact-form" method="post" action="submit_contact.php" class="space-y-6">
                     <input type="hidden" name="property_id" value="<?php echo htmlspecialchars($id); ?>">
-                    <input type="hidden" name="property_title" value="<?php echo htmlspecialchars($property['title'] ?? 'Not specified'); ?>">
+                    <input type="hidden" name="property_title" value="<?php echo htmlspecialchars($property['title']); ?>">
                     <div>
                         <label for="name" class="block text-left text-gray-700 font-medium mb-1">Your Name</label>
                         <input type="text" name="name" placeholder="Enter your name" class="w-full p-3 rounded-lg border border-gray-300 text-gray-800 placeholder-gray-500 focus:ring-2 custom-teal-focus focus:border-transparent" required>
