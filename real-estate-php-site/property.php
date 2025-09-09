@@ -38,18 +38,24 @@ $property['location_advantages'] = $property['location_advantages'] ?? [
 ];
 $property['payment'] = $property['payment'] ?? [
     'plan_a' => [
-        'area' => $property['area_sqft'],
-        'total_price' => $property['price'],
-        'booking_price' => $property['price'] * 0.1,
-        'balance_price' => $property['price'] * 0.9,
-        'timeline' => '12 months'
+        'booking_amount' => $property['price'] * 0.1,
+        'remaining_amount' => $property['price'] * 0.9,
+        'duration_days' => 365
     ],
-    'emi_option' => [
-        'booking' => $property['price'] * 0.1,
-        'installment_1' => $property['price'] * 0.2,
-        'per_month_emi' => ($property['price'] * 0.7) / 60 // Approx 5-year EMI
+    'plan_b' => [
+        'booking_amount' => $property['price'] * 0.1,
+        'remaining_amount' => $property['price'] * 0.9,
+        'duration_days' => 548
     ]
 ];
+// Only add emi_plan fallback if explicitly needed (not added by default)
+if (isset($property['payment']['emi_plan'])) {
+    $property['payment']['emi_plan'] = $property['payment']['emi_plan'] ?? [
+        'booking_amount' => $property['price'] * 0.1,
+        'per_month_emi' => ($property['price'] * 0.9) / 60,
+        'total_duration_months' => 60
+    ];
+}
 
 // Function to fetch coordinates automatically using Nominatim API
 function get_coordinates($address) {
@@ -285,27 +291,39 @@ $property['map_embed'] = '<iframe src="https://www.google.com/maps/embed?pb=!1m1
     <section class="py-20 bg-white">
         <div class="container mx-auto px-4">
             <h2 class="text-4xl font-bold text-center text-teal mb-12 animate-fadeInUp">Payment Details</h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+            <div class="grid grid-cols-1 <?php echo isset($property['payment']['emi_plan']) ? 'md:grid-cols-3' : 'md:grid-cols-2'; ?> gap-12">
                 <!-- Plan A -->
                 <div class="bg-teal-50 p-6 rounded-xl shadow-lg animate-fadeInUp">
                     <h3 class="text-2xl font-semibold text-teal mb-6">Plan A: Full Payment</h3>
                     <ul class="space-y-4 text-gray-600">
-                        <li><strong>Area:</strong> <?php echo (int)$property['payment']['plan_a']['area']; ?> sqft</li>
-                        <li><strong>Total Price:</strong> ₹<?php echo number_format($property['payment']['plan_a']['total_price']); ?></li>
-                        <li><strong>Booking Price:</strong> ₹<?php echo number_format($property['payment']['plan_a']['booking_price']); ?></li>
-                        <li><strong>Balance Price:</strong> ₹<?php echo number_format($property['payment']['plan_a']['balance_price']); ?></li>
-                        <li><strong>Timeline:</strong> <?php echo htmlspecialchars($property['payment']['plan_a']['timeline']); ?></li>
+                        <li><strong>Total Price:</strong> ₹<?php echo number_format($property['price']); ?></li>
+                        <li><strong>Booking Amount:</strong> ₹<?php echo number_format($property['payment']['plan_a']['booking_amount']); ?></li>
+                        <li><strong>Remaining Amount:</strong> ₹<?php echo number_format($property['payment']['plan_a']['remaining_amount']); ?></li>
+                        <li><strong>Duration:</strong> <?php echo (int)$property['payment']['plan_a']['duration_days']; ?> days</li>
                     </ul>
                 </div>
-                <!-- Part B: EMI Option -->
+                <!-- Plan B -->
                 <div class="bg-teal-50 p-6 rounded-xl shadow-lg animate-fadeInUp" style="animation-delay: 0.2s;">
-                    <h3 class="text-2xl font-semibold text-teal mb-6">Part B: EMI Option</h3>
+                    <h3 class="text-2xl font-semibold text-teal mb-6">Plan B: Extended Payment</h3>
                     <ul class="space-y-4 text-gray-600">
-                        <li><strong>Booking:</strong> ₹<?php echo number_format($property['payment']['emi_option']['booking']); ?></li>
-                        <li><strong>Installment 1:</strong> ₹<?php echo number_format($property['payment']['emi_option']['installment_1']); ?></li>
-                        <li><strong>Per Month EMI:</strong> ₹<?php echo number_format($property['payment']['emi_option']['per_month_emi']); ?></li>
+                        <li><strong>Total Price:</strong> ₹<?php echo number_format($property['price']); ?></li>
+                        <li><strong>Booking Amount:</strong> ₹<?php echo number_format($property['payment']['plan_b']['booking_amount']); ?></li>
+                        <li><strong>Remaining Amount:</strong> ₹<?php echo number_format($property['payment']['plan_b']['remaining_amount']); ?></li>
+                        <li><strong>Duration:</strong> <?php echo (int)$property['payment']['plan_b']['duration_days']; ?> days</li>
                     </ul>
                 </div>
+                <!-- EMI Plan (Conditional) -->
+                <?php if (isset($property['payment']['emi_plan'])): ?>
+                    <div class="bg-teal-50 p-6 rounded-xl shadow-lg animate-fadeInUp" style="animation-delay: 0.4s;">
+                        <h3 class="text-2xl font-semibold text-teal mb-6">EMI Plan</h3>
+                        <ul class="space-y-4 text-gray-600">
+                            <li><strong>Total Price:</strong> ₹<?php echo number_format($property['price']); ?></li>
+                            <li><strong>Booking Amount:</strong> ₹<?php echo number_format($property['payment']['emi_plan']['booking_amount']); ?></li>
+                            <li><strong>Per Month EMI:</strong> ₹<?php echo number_format($property['payment']['emi_plan']['per_month_emi']); ?></li>
+                            <li><strong>Total Duration:</strong> <?php echo (int)$property['payment']['emi_plan']['total_duration_months']; ?> months</li>
+                        </ul>
+                    </div>
+                <?php endif; ?>
             </div>
         </div>
     </section>
