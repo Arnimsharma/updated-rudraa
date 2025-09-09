@@ -4,8 +4,6 @@
     "title": "Keya Farms",
     "price": 4499000,
     "city": "Mathura",
-    "beds": 2,
-    "baths": 2,
     "area_sqft": 920,
     "type": "Apartment",
     "image": "assets/images/KeyaFarms.jpg",
@@ -27,16 +25,19 @@
     "lon": 77.6737,
     "payment": {
       "plan_a": {
-        "area": 920,
-        "total_price": 85000,
-        "booking_price": 8500,
-        "balance_price": 76500,
-        "timeline": "12 months"
+        "booking_amount": 449900,
+        "remaining_amount": 4049100,
+        "duration_days": 365
       },
-      "emi_option": {
-        "booking": 8500,
-        "installment_1": 20000,
-        "per_month_emi": 1250
+      "plan_b": {
+        "booking_amount": 449900,
+        "remaining_amount": 4049100,
+        "duration_days": 548
+      },
+      "emi_plan": {
+        "booking_amount": 449900,
+        "per_month_emi": 67485,
+        "total_duration_months": 60
       }
     },
     "location_advantages": [
@@ -52,8 +53,6 @@
     "title": "VIP City",
     "price": 1120000,
     "city": "Vrindavan",
-    "beds": 3,
-    "baths": 3,
     "area_sqft": 1750,
     "type": "Villa",
     "image": "assets/images/vipcity.jpg",
@@ -75,16 +74,19 @@
     "lon": 77.6593,
     "payment": {
       "plan_a": {
-        "area": 1750,
-        "total_price": 145000,
-        "booking_price": 14500,
-        "balance_price": 130500,
-        "timeline": "18 months"
+        "booking_amount": 112000,
+        "remaining_amount": 1008000,
+        "duration_days": 548
       },
-      "emi_option": {
-        "booking": 14500,
-        "installment_1": 35000,
-        "per_month_emi": 2150
+      "plan_b": {
+        "booking_amount": 112000,
+        "remaining_amount": 1008000,
+        "duration_days": 822
+      },
+      "emi_plan": {
+        "booking_amount": 112000,
+        "per_month_emi": 16800,
+        "total_duration_months": 60
       }
     },
     "location_advantages": [
@@ -100,8 +102,6 @@
     "title": "Mapple Park",
     "price": 492000,
     "city": "Jaipur",
-    "beds": 1,
-    "baths": 1,
     "area_sqft": 700,
     "type": "Loft",
     "image": "assets/images/mapple_park.jpg",
@@ -123,16 +123,14 @@
     "lon": 75.7873,
     "payment": {
       "plan_a": {
-        "area": 700,
-        "total_price": 110000,
-        "booking_price": 11000,
-        "balance_price": 99000,
-        "timeline": "10 months"
+        "booking_amount": 49200,
+        "remaining_amount": 442800,
+        "duration_days": 304
       },
-      "emi_option": {
-        "booking": 11000,
-        "installment_1": 25000,
-        "per_month_emi": 1600
+      "plan_b": {
+        "booking_amount": 49200,
+        "remaining_amount": 442800,
+        "duration_days": 456
       }
     },
     "location_advantages": [
@@ -148,8 +146,6 @@
     "title": "Uptown City",
     "price": 1600000,
     "city": "Neemrana",
-    "beds": 4,
-    "baths": 3,
     "area_sqft": 2100,
     "type": "House",
     "image": "assets/images/uptown city.jpg",
@@ -171,16 +167,14 @@
     "lon": 76.3787,
     "payment": {
       "plan_a": {
-        "area": 2100,
-        "total_price": 125000,
-        "booking_price": 12500,
-        "balance_price": 112500,
-        "timeline": "15 months"
+        "booking_amount": 160000,
+        "remaining_amount": 1440000,
+        "duration_days": 456
       },
-      "emi_option": {
-        "booking": 12500,
-        "installment_1": 30000,
-        "per_month_emi": 1850
+      "plan_b": {
+        "booking_amount": 160000,
+        "remaining_amount": 1440000,
+        "duration_days": 684
       }
     },
     "location_advantages": [
@@ -196,8 +190,6 @@
     "title": "Vista Hills",
     "price": 3000000,
     "city": "Gurgaon",
-    "beds": 4,
-    "baths": 3,
     "area_sqft": 2100,
     "type": "House",
     "image": "assets/images/suburb-house.svg",
@@ -219,16 +211,19 @@
     "lon": 76.3787,
     "payment": {
       "plan_a": {
-        "area": 2100,
-        "total_price": 125000,
-        "booking_price": 12500,
-        "balance_price": 112500,
-        "timeline": "15 months"
+        "booking_amount": 300000,
+        "remaining_amount": 2700000,
+        "duration_days": 456
       },
-      "emi_option": {
-        "booking": 12500,
-        "installment_1": 30000,
-        "per_month_emi": 1850
+      "plan_b": {
+        "booking_amount": 300000,
+        "remaining_amount": 2700000,
+        "duration_days": 684
+      },
+      "emi_plan": {
+        "booking_amount": 300000,
+        "per_month_emi": 45000,
+        "total_duration_months": 60
       }
     },
     "location_advantages": [
